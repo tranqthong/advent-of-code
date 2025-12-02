@@ -20,7 +20,8 @@ fn parse_instructions(instructions: &Vec<&str>) -> (i32, i32) {
             if spin_direction == 'L' {
                 current_pointer = spin_left(&current_pointer, &spin_count, &mut zero_click_counter);
             } else if spin_direction == 'R' {
-                current_pointer = spin_right(&current_pointer, &spin_count, &mut zero_click_counter);
+                current_pointer =
+                    spin_right(&current_pointer, &spin_count, &mut zero_click_counter);
             } else {
                 println!("Error in parsing instructions");
             }
@@ -30,7 +31,6 @@ fn parse_instructions(instructions: &Vec<&str>) -> (i32, i32) {
             }
         }
     }
-
     (end_at_zero_counter, zero_click_counter)
 }
 
@@ -74,7 +74,7 @@ mod tests {
 
     #[test]
     fn test_day_example_input() {
-        let example_input = "src/aoc_2025/day_1_ex_input.txt";
+        let example_input = "src/aoc_2025/inputs/day_1_ex_input.txt";
         let (result, zero_click) = secret_password(&example_input);
         assert_eq!(result, 3);
         assert_eq!(zero_click, 6);
@@ -104,7 +104,7 @@ mod tests {
     #[test]
     fn test_spring_right_rollover() {
         let mut z_counter = 0;
-        let result = spin_right(&99, &2,&mut z_counter);
+        let result = spin_right(&99, &2, &mut z_counter);
         assert_eq!(result, 1);
     }
 }
