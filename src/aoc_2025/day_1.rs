@@ -47,10 +47,8 @@ fn parse_instruct(instruct: &str) -> Option<(char, i32)> {
 
 fn spin_left(dial_pointer: &i32, spin_count: &i32, zero_counter: &mut i32) -> i32 {
     let sum = dial_pointer - spin_count;
-    if sum <= 0 {
-        let zero_click = sum / 100;
-        *zero_counter += zero_click.abs();
 
+    if sum <= 0 {
         //apparently rust modulo operator doesn't like negative numbers
         return sum.rem_euclid(100);
     }
@@ -59,10 +57,8 @@ fn spin_left(dial_pointer: &i32, spin_count: &i32, zero_counter: &mut i32) -> i3
 
 fn spin_right(dial_pointer: &i32, spin_count: &i32, zero_counter: &mut i32) -> i32 {
     let sum = dial_pointer + spin_count;
-    if sum > 99 {
-        let zero_click = sum / 100;
-        *zero_counter += zero_click.abs();
 
+    if sum > 99 {
         return sum % 100;
     }
     sum
