@@ -10,7 +10,7 @@ pub fn secret_password(input_filepath: &str) -> (i32, i32) {
 }
 
 fn parse_instructions(instructions: &Vec<&str>) -> (i32, i32) {
-    let mut current_pointer = 50;
+    let mut dial_pointer = 50;
     let mut end_at_zero_counter = 0;
     let mut zero_click_counter = 0;
 
@@ -18,15 +18,14 @@ fn parse_instructions(instructions: &Vec<&str>) -> (i32, i32) {
         let parse_result = parse_instruct(instruct);
         if let Some((spin_direction, spin_count)) = parse_result {
             if spin_direction == 'L' {
-                current_pointer = spin_left(current_pointer, spin_count, &mut zero_click_counter);
+                spin_left(&mut dial_pointer, spin_count, &mut zero_click_counter);
             } else if spin_direction == 'R' {
-                current_pointer =
-                    spin_right(current_pointer, spin_count, &mut zero_click_counter);
+                spin_right(&mut dial_pointer, spin_count, &mut zero_click_counter);
             } else {
                 println!("Error in parsing instructions");
             }
 
-            if current_pointer == 0 {
+            if dial_pointer == 0 {
                 end_at_zero_counter += 1;
             }
         }
@@ -45,23 +44,35 @@ fn parse_instruct(instruct: &str) -> Option<(char, i32)> {
     })
 }
 
-fn spin_left(dial_pointer: i32, spin_count: i32, zero_counter: &mut i32) -> i32 {
-    let sum = dial_pointer - spin_count;
+fn spin_left(dial_pointer: &mut i32, spin_count: i32, zero_counter: &mut i32) {
+    // yea... I'm just going to brute force for part 2, haha
+    for _i in 0..spin_count {
+        *dial_pointer -= 1;
+        if *dial_pointer == -1 {
+            *dial_pointer = 99;
+        }
+        if *dial_pointer == 0 {
+            *zero_counter += 1;
+        }
 
-    if sum <= 0 {
-        //apparently rust modulo operator doesn't like negative numbers
-        return sum.rem_euclid(100);
+
     }
-    sum
 }
 
-fn spin_right(dial_pointer: i32, spin_count: i32, zero_counter: &mut i32) -> i32 {
-    let sum = dial_pointer + spin_count;
+fn spin_right(dial_pointer: &mut i32, spin_count: i32, zero_counter: &mut i32) {
+    // yea... I'm just going to brute force for part 2, haha
+    for _i in 0..spin_count {
+        *dial_pointer += 1;
+        if *dial_pointer == 100 {
+            *dial_pointer = 0;
+        }
 
-    if sum > 99 {
-        return sum % 100;
+        if *dial_pointer == 0 {
+            *zero_counter += 1;
+        }
+
+
     }
-    sum
 }
 
 #[cfg(test)]
@@ -79,28 +90,49 @@ mod tests {
     #[test]
     fn test_spin_left() {
         let mut z_counter = 0;
-        let result = spin_left(50, 50, &mut z_counter);
-        assert_eq!(result, 0);
+        let mut dial_ptr = 50;
+        spin_left(&mut dial_ptr, 50, &mut z_counter);
+        assert_eq!(dial_ptr, 0);
     }
 
     #[test]
     fn test_sping_left_rollover() {
         let mut z_counter = 0;
-        let result = spin_left(50, 60, &mut z_counter);
-        assert_eq!(result, 90);
+        let mut dial_ptr = 50;
+        spin_left(&mut dial_ptr, 60, &mut z_counter);
+        assert_eq!(dial_ptr, 90);
+    }
+
+    #[test]
+    fn test_sping_left_rollover_zero_clicks() {
+        let mut z_counter = 0;
+        let mut dial_ptr = 50;
+        spin_left(&mut dial_ptr, 250, &mut z_counter);
+        assert_eq!(dial_ptr, 0);
+        assert_eq!(z_counter, 3);
     }
 
     #[test]
     fn test_sping_right() {
         let mut z_counter = 0;
-        let result = spin_right(50, 50, &mut z_counter);
-        assert_eq!(result, 0);
+        let mut dial_ptr = 50;
+        spin_right(&mut dial_ptr, 50, &mut z_counter);
+        assert_eq!(dial_ptr, 0);
     }
 
     #[test]
     fn test_spring_right_rollover() {
         let mut z_counter = 0;
-        let result = spin_right(99, 2, &mut z_counter);
-        assert_eq!(result, 1);
+        let mut dial_ptr = 99;
+        spin_right(&mut dial_ptr, 2, &mut z_counter);
+        assert_eq!(dial_ptr, 1);
+    }
+
+    #[test]
+    fn test_spring_right_rollover_zero_clicks() {
+        let mut z_counter = 0;
+        let mut dial_ptr = 99;
+        spin_right(&mut dial_ptr, 2, &mut z_counter);
+        assert_eq!(z_counter, 1);
     }
 }
