@@ -18,10 +18,10 @@ fn parse_instructions(instructions: &Vec<&str>) -> (i32, i32) {
         let parse_result = parse_instruct(instruct);
         if let Some((spin_direction, spin_count)) = parse_result {
             if spin_direction == 'L' {
-                current_pointer = spin_left(&current_pointer, &spin_count, &mut zero_click_counter);
+                current_pointer = spin_left(current_pointer, spin_count, &mut zero_click_counter);
             } else if spin_direction == 'R' {
                 current_pointer =
-                    spin_right(&current_pointer, &spin_count, &mut zero_click_counter);
+                    spin_right(current_pointer, spin_count, &mut zero_click_counter);
             } else {
                 println!("Error in parsing instructions");
             }
@@ -45,7 +45,7 @@ fn parse_instruct(instruct: &str) -> Option<(char, i32)> {
     })
 }
 
-fn spin_left(dial_pointer: &i32, spin_count: &i32, zero_counter: &mut i32) -> i32 {
+fn spin_left(dial_pointer: i32, spin_count: i32, zero_counter: &mut i32) -> i32 {
     let sum = dial_pointer - spin_count;
 
     if sum <= 0 {
@@ -55,7 +55,7 @@ fn spin_left(dial_pointer: &i32, spin_count: &i32, zero_counter: &mut i32) -> i3
     sum
 }
 
-fn spin_right(dial_pointer: &i32, spin_count: &i32, zero_counter: &mut i32) -> i32 {
+fn spin_right(dial_pointer: i32, spin_count: i32, zero_counter: &mut i32) -> i32 {
     let sum = dial_pointer + spin_count;
 
     if sum > 99 {
@@ -79,28 +79,28 @@ mod tests {
     #[test]
     fn test_spin_left() {
         let mut z_counter = 0;
-        let result = spin_left(&50, &50, &mut z_counter);
+        let result = spin_left(50, 50, &mut z_counter);
         assert_eq!(result, 0);
     }
 
     #[test]
     fn test_sping_left_rollover() {
         let mut z_counter = 0;
-        let result = spin_left(&50, &60, &mut z_counter);
+        let result = spin_left(50, 60, &mut z_counter);
         assert_eq!(result, 90);
     }
 
     #[test]
     fn test_sping_right() {
         let mut z_counter = 0;
-        let result = spin_right(&50, &50, &mut z_counter);
+        let result = spin_right(50, 50, &mut z_counter);
         assert_eq!(result, 0);
     }
 
     #[test]
     fn test_spring_right_rollover() {
         let mut z_counter = 0;
-        let result = spin_right(&99, &2, &mut z_counter);
+        let result = spin_right(99, 2, &mut z_counter);
         assert_eq!(result, 1);
     }
 }
