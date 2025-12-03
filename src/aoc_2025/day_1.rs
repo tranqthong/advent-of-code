@@ -54,8 +54,6 @@ fn spin_left(dial_pointer: &mut i32, spin_count: i32, zero_counter: &mut i32) {
         if *dial_pointer == 0 {
             *zero_counter += 1;
         }
-
-
     }
 }
 
@@ -66,12 +64,9 @@ fn spin_right(dial_pointer: &mut i32, spin_count: i32, zero_counter: &mut i32) {
         if *dial_pointer == 100 {
             *dial_pointer = 0;
         }
-
         if *dial_pointer == 0 {
             *zero_counter += 1;
         }
-
-
     }
 }
 
