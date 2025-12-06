@@ -1,6 +1,6 @@
 use std::fs;
 
-pub fn lobby(input_filepath: &str) -> (u32, u64) {
+pub fn lobby(input_filepath: &str) -> (u64, u64) {
     let input_content = fs::read_to_string(input_filepath).expect("Unable to read file");
     let input_iter = input_content.lines();
     let battery_banks: Vec<&str> = input_iter.collect();
@@ -8,49 +8,33 @@ pub fn lobby(input_filepath: &str) -> (u32, u64) {
     get_total_output_joltage(battery_banks)
 }
 
-fn get_total_output_joltage(battery_banks: Vec<&str>) -> (u32, u64) {
+fn get_total_output_joltage(battery_banks: Vec<&str>) -> (u64, u64) {
     let mut total_joltage_p1 = 0;
     let mut total_joltage_p2 = 0;
     for bank in battery_banks {
-        total_joltage_p1 += largest_joltage_p1(bank);
-        total_joltage_p2 += largest_joltage_p2(bank);
+        total_joltage_p1 += largest_joltage(bank.as_bytes(), 2);
+        total_joltage_p2 += largest_joltage(bank.as_bytes(), 12);
     }
 
     (total_joltage_p1, total_joltage_p2)
 }
 
-fn largest_joltage_p1(battery_bank: &str) -> u32 {
-    let mut largest_digit = 0;
-    let mut largest_digit_pos = 0;
+fn largest_joltage(mut battery_bank: &[u8], num_digits: usize) -> u64 {
+    let mut joltage = 0;
 
-    let bank_values: Vec<u32> = battery_bank.chars().flat_map(|c| c.to_digit(10)).collect();
-    for (idx, j_value) in bank_values.iter().enumerate().take(bank_values.len() - 1) {
-        let jolt_value = *j_value;
-        if jolt_value > largest_digit {
-            largest_digit = jolt_value;
-            largest_digit_pos = idx;
-        }
+    for i in (0..num_digits).rev() {
+        let (largest_idx, volts) = battery_bank
+            .iter()
+            .enumerate()
+            .rev()
+            .skip(i)
+            .max_by_key(|x| x.1)
+            .unwrap();
+        battery_bank = &battery_bank[largest_idx+1..];
+        joltage = joltage * 10 + (volts - b'0') as u64;
     }
 
-    let mut second_largest_digit = 0;
-    for j_value in bank_values.iter().skip(largest_digit_pos + 1) {
-        if *j_value > second_largest_digit {
-            second_largest_digit = *j_value;
-        }
-    }
-
-    largest_digit * 10 + second_largest_digit
-}
-
-fn largest_joltage_p2(battery_bank: &str) -> u64 {
-    let mut joltage_p2: Vec<u32> = Vec::with_capacity(12);
-    let bank_values: Vec<u32> = battery_bank.chars().flat_map(|c| c.to_digit(10)).collect();
-
-    for i in 0..bank_values.capacity() {
-        // let
-    }
-
-    0
+    joltage
 }
 
 #[cfg(test)]
@@ -69,20 +53,56 @@ mod tests {
     }
 
     #[test]
-    fn test_largest_joltage_98() {
+    fn test_largest_joltage_p1_98() {
         let test_input = "987654321111111";
 
-        let result = largest_joltage_p1(test_input);
+        let result = largest_joltage(test_input.as_bytes(), 2);
 
         assert_eq!(result, 98);
     }
 
     #[test]
-    fn test_largest_joltage_89() {
+    fn test_largest_joltage_p2_98() {
+        let test_input = "987654321111111";
+
+        let result = largest_joltage(test_input.as_bytes(), 12);
+
+        assert_eq!(result, 987654321111);
+    }
+
+    #[test]
+    fn test_largest_joltage_p1_89() {
         let test_input = "811111111111119";
 
-        let result = largest_joltage_p1(test_input);
+        let result = largest_joltage(test_input.as_bytes(), 2);
 
         assert_eq!(result, 89);
+    }
+
+    #[test]
+    fn test_largest_joltage_p2_89() {
+        let test_input = "811111111111119";
+
+        let result = largest_joltage(test_input.as_bytes(), 12);
+
+        assert_eq!(result, 811111111119);
+    }
+
+    #[test]
+    fn test_largest_voltage_p1_78() {
+        let test_input = "234234234234278";
+
+        let result = largest_joltage(test_input.as_bytes(), 2);
+
+        assert_eq!(result, 78);
+    }
+
+    #[test]
+    fn test_largest_voltage_p2_78() {
+        let test_input = "234234234234278";
+
+        let result = largest_joltage(test_input.as_bytes(), 12);
+
+        assert_eq!(result, 434234234278);
     }
 }
