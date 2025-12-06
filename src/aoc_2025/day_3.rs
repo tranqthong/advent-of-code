@@ -24,8 +24,8 @@ fn largest_joltage_p1(battery_bank: &str) -> u32 {
     let mut largest_digit_pos = 0;
 
     let bank_values: Vec<u32> = battery_bank.chars().flat_map(|c| c.to_digit(10)).collect();
-    for idx in 0..(bank_values.len() - 1) {
-        let jolt_value = bank_values[idx];
+    for (idx, j_value) in bank_values.iter().enumerate().take(bank_values.len() - 1) {
+        let jolt_value = *j_value;
         if jolt_value > largest_digit {
             largest_digit = jolt_value;
             largest_digit_pos = idx;
@@ -33,9 +33,9 @@ fn largest_joltage_p1(battery_bank: &str) -> u32 {
     }
 
     let mut second_largest_digit = 0;
-    for idx in (largest_digit_pos + 1)..bank_values.len() {
-        if bank_values[idx] > second_largest_digit {
-            second_largest_digit = bank_values[idx];
+    for j_value in bank_values.iter().skip(largest_digit_pos + 1) {
+        if *j_value > second_largest_digit {
+            second_largest_digit = *j_value;
         }
     }
 
@@ -45,6 +45,10 @@ fn largest_joltage_p1(battery_bank: &str) -> u32 {
 fn largest_joltage_p2(battery_bank: &str) -> u64 {
     let mut joltage_p2: Vec<u32> = Vec::with_capacity(12);
     let bank_values: Vec<u32> = battery_bank.chars().flat_map(|c| c.to_digit(10)).collect();
+
+    for i in 0..bank_values.capacity() {
+        // let
+    }
 
     0
 }
