@@ -10,6 +10,7 @@ fn main() {
 fn day_4() {
     let paper_rolls = crate::aoc_2025::day_4::printing_department("src/aoc_2025/inputs/day4.txt");
     println!("Day 4 part 1: {}", paper_rolls.0);
+    println!("Day 4 part 2: {}", paper_rolls.1);
 }
 
 #[allow(unused)]
