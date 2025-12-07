@@ -5,10 +5,10 @@ pub fn lobby(input_filepath: &str) -> (u64, u64) {
     let input_iter = input_content.lines();
     let battery_banks: Vec<&str> = input_iter.collect();
 
-    get_total_output_joltage(battery_banks)
+    get_total_output_joltage(&battery_banks)
 }
 
-fn get_total_output_joltage(battery_banks: Vec<&str>) -> (u64, u64) {
+fn get_total_output_joltage(battery_banks: &Vec<&str>) -> (u64, u64) {
     let mut total_joltage_p1 = 0;
     let mut total_joltage_p2 = 0;
     for bank in battery_banks {
@@ -30,7 +30,7 @@ fn largest_joltage(mut battery_bank: &[u8], num_digits: usize) -> u64 {
             .skip(i)
             .max_by_key(|x| x.1)
             .unwrap();
-        battery_bank = &battery_bank[largest_idx+1..];
+        battery_bank = &battery_bank[largest_idx + 1..];
         joltage = joltage * 10 + (volts - b'0') as u64;
     }
 

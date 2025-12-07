@@ -3,7 +3,13 @@ mod aoc_2025;
 
 fn main() {
     println!("Hello, world!");
-    day_3();
+    day_4();
+}
+
+#[allow(unused)]
+fn day_4() {
+    let paper_rolls = crate::aoc_2025::day_4::printing_department("src/aoc_2025/inputs/day4.txt");
+    println!("Day 4 part 1: {}", paper_rolls.0);
 }
 
 #[allow(unused)]
