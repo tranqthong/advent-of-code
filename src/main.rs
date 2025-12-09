@@ -3,12 +3,18 @@ mod aoc_2025;
 
 fn main() {
     println!("Hello, world!");
-    day_4();
+    day_5();
+}
+
+#[allow(unused)]
+fn day_5() {
+    let fresh_ingredients = crate::aoc_2025::day_5::cafeteria("src/aoc_2025/inputs/day_5.txt");
+    println!("Day 5 part 1: {}", fresh_ingredients);
 }
 
 #[allow(unused)]
 fn day_4() {
-    let paper_rolls = crate::aoc_2025::day_4::printing_department("src/aoc_2025/inputs/day4.txt");
+    let paper_rolls = crate::aoc_2025::day_4::printing_department("src/aoc_2025/inputs/day_4.txt");
     println!("Day 4 part 1: {}", paper_rolls.0);
     println!("Day 4 part 2: {}", paper_rolls.1);
 }
