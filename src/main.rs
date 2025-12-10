@@ -9,7 +9,8 @@ fn main() {
 #[allow(unused)]
 fn day_5() {
     let fresh_ingredients = crate::aoc_2025::day_5::cafeteria("src/aoc_2025/inputs/day_5.txt");
-    println!("Day 5 part 1: {}", fresh_ingredients);
+    println!("Day 5 part 1: {}", fresh_ingredients.0);
+    println!("Day 5 part 2: {}", fresh_ingredients.1);
 }
 
 #[allow(unused)]

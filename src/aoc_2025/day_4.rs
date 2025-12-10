@@ -11,7 +11,7 @@ pub fn printing_department(input_filepath: &str) -> (u64, u64) {
     (part1, part2)
 }
 
-fn get_total_paper_rolls(paper_grid: &Vec<Vec<u8>>) -> u64 {
+fn get_total_paper_rolls(paper_grid: &[Vec<u8>]) -> u64 {
     let mut rollable_paper_count = 0;
 
     for (r_idx, row) in paper_grid.iter().enumerate() {
@@ -35,7 +35,7 @@ fn get_total_paper_rolls(paper_grid: &Vec<Vec<u8>>) -> u64 {
     rollable_paper_count
 }
 
-fn get_removable_paper_rolls(paper_grid: &mut Vec<Vec<u8>>) -> u64 {
+fn get_removable_paper_rolls(paper_grid: &mut [Vec<u8>]) -> u64 {
     let mut removable_paper_count = 0;
 
     let mut papers_rolls_removal_list: Vec<(usize, usize)> = Vec::new();
@@ -57,12 +57,11 @@ fn get_removable_paper_rolls(paper_grid: &mut Vec<Vec<u8>>) -> u64 {
             for (r_idx, c_idx) in neighbor_iterator(row, col) {
                 if let Some(r) = paper_grid.get(r_idx)
                     && let Some(roll) = r.get(c_idx)
+                    && roll == &b'@'
                 {
-                    if roll == &b'@' {
-                        neighbor_rolls_list[r_idx][c_idx] =
-                            neighbor_rolls_list[r_idx][c_idx].saturating_sub(1);
-                        papers_rolls_removal_list.push((r_idx, c_idx));
-                    }
+                    neighbor_rolls_list[r_idx][c_idx] =
+                        neighbor_rolls_list[r_idx][c_idx].saturating_sub(1);
+                    papers_rolls_removal_list.push((r_idx, c_idx));
                 }
             }
         }
@@ -97,8 +96,8 @@ fn neighbor_iterator(row: usize, col: usize) -> impl Iterator<Item = (usize, usi
     neighbors.into_iter()
 }
 
-fn print_grid(paper_grid: &Vec<Vec<u8>>) {
-    for (_r_idx, row) in paper_grid.iter().enumerate() {
+fn print_grid(paper_grid: &[Vec<u8>]) {
+    for row in paper_grid {
         let row_str = std::str::from_utf8(row).unwrap();
         println!("{}", row_str);
     }
