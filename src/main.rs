@@ -3,7 +3,13 @@ mod aoc_2025;
 
 fn main() {
     println!("Hello, world!");
-    day_5();
+    day_6();
+}
+
+#[allow(unused)]
+fn day_6() {
+    let grand_total = crate::aoc_2025::day_6::trash_compactor("src/aoc_2025/inputs/day_6.txt");
+    println!("Day 6 part 1: {}", grand_total);
 }
 
 #[allow(unused)]
