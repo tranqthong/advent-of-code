@@ -9,7 +9,8 @@ fn main() {
 #[allow(unused)]
 fn day_6() {
     let grand_total = crate::aoc_2025::day_6::trash_compactor("src/aoc_2025/inputs/day_6.txt");
-    println!("Day 6 part 1: {}", grand_total);
+    println!("Day 6 part 1: {}", grand_total.0);
+    println!("Day 6 part 2: {}", grand_total.1);
 }
 
 #[allow(unused)]
