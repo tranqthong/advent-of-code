@@ -23,31 +23,36 @@ pub fn trash_compactor(input_filepath: &str) -> (usize, usize) {
 
     // parsing input for part 2
     let mut numbers_list_p2: Vec<Vec<usize>> = Vec::with_capacity(operations.len());
-    for (ops_idx, operand) in input_str_lists.iter().enumerate().rev() {
-        if *operand == "+" || *operand == "*" {
-            get_digits(&input_str_lists, &mut numbers_list_p2, ops_idx);
-        }
+    let operation_line = input_str_lists[input_str_lists.len() - 1];
+    let number_lines = &input_str_lists[0..input_str_lists.len() - 1];
 
-    }
+    let mut current_set_finished = false;
+    let mut number_set_list: Vec<usize> = Vec::with_capacity(number_lines.len());
+    for (c_idx, c) in operation_line.char_indices() {
+        let current_digits = get_digits(number_lines, c_idx);
+        if current_digits.is_empty() {
 
-    for (line_idx, line) in input_str_lists.iter().enumerate().rev() {
-        println!("{}", line);
-        for (char_idx, c) in line.char_indices() {
-            let mut next_set = false;
-            if c == '+' || c == '*' {
-                println!("{}", c);
-                next_set = true;
-            }
+        } else {
+            number_set_list.push(current_digits);
         }
     }
 
     let p1 = calculate_math_p1(&numbers_list, &operations);
-    let p2 = calculate_math_p2(&numbers_list, &operations);
+    let p2 = calculate_math_p2(&numbers_list_p2, &operations);
     (p1, p2)
 }
 
-fn get_digits(input_str_lists: &[&str], number_lists: &mut [Vec<usize>], current_idx: usize) {
-    for 
+fn get_digits(number_lines: &[&str], idx: usize) -> Vec<usize> {
+    let n_length = number_lines.len();
+    let mut digits = Vec::with_capacity(n_length - 1);
+    for i in [0..n_length-1] {
+        let digit = number_lines[i][idx];
+        if digit != " " {
+            digits.push(digit.parse().expect("Can't parse digit"));
+        }
+    }
+
+    digits
 }
 
 fn seperate_digits(mut num: usize) -> Vec<usize> {
