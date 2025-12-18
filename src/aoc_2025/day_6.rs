@@ -25,16 +25,23 @@ pub fn trash_compactor(input_filepath: &str) -> (usize, usize) {
     let mut numbers_list_p2: Vec<Vec<usize>> = Vec::with_capacity(operations.len());
     let operation_line = input_str_lists[input_str_lists.len() - 1];
     let number_lines = &input_str_lists[0..input_str_lists.len() - 1];
-
-    let mut current_set_finished = false;
+    let number_line_str_len = operation_line.len();
     let mut number_set_list: Vec<usize> = Vec::with_capacity(number_lines.len());
-    for (c_idx, c) in operation_line.char_indices() {
-        let current_digits = get_digits(number_lines, c_idx);
-        if current_digits.is_empty() {
 
+    for idx in 0..number_line_str_len {
+        let current_digits = get_digits(number_lines, idx);
+        if current_digits.is_empty() {
+            numbers_list_p2.push(number_set_list.clone());
+            number_set_list.clear();
         } else {
-            number_set_list.push(current_digits);
+            let combined_number = current_digits.iter().fold(0, |sig_fig, d| sig_fig * 10 + d);
+            number_set_list.push(combined_number);
         }
+    }
+
+    if !number_set_list.is_empty() && numbers_list_p2.len() != operations.len() {
+        numbers_list_p2.push(number_set_list.clone());
+        number_set_list.clear();
     }
 
     let p1 = calculate_math_p1(&numbers_list, &operations);
@@ -44,44 +51,39 @@ pub fn trash_compactor(input_filepath: &str) -> (usize, usize) {
 
 fn get_digits(number_lines: &[&str], idx: usize) -> Vec<usize> {
     let n_length = number_lines.len();
-    let mut digits = Vec::with_capacity(n_length - 1);
-    for i in [0..n_length-1] {
-        let digit = number_lines[i][idx];
-        if digit != " " {
-            digits.push(digit.parse().expect("Can't parse digit"));
+    let mut digits = Vec::with_capacity(n_length);
+    for i in 0..n_length {
+        let line = number_lines.get(i).expect("Unable to get line");
+        let digit = line.chars().nth(idx);
+        match digit {
+            Some(d) => {
+                if d != ' ' {
+                    digits.push(d.to_digit(10).expect("Unable to parse str as a int") as usize)
+                }
+            }
+            None => continue,
         }
     }
 
     digits
 }
 
-fn seperate_digits(mut num: usize) -> Vec<usize> {
-    let mut num_digits: Vec<usize> = vec![];
-    if num == 0 {
-        num_digits.push(0);
-    }
-
-    while num > 0 {
-        num_digits.push(num % 10);
-        num /= 10;
-    }
-
-    num_digits.reverse();
-    num_digits
-}
-
 fn calculate_math_p2(number_lists: &[Vec<usize>], operations: &Vec<&str>) -> usize {
     let mut sums_list: Vec<usize> = vec![];
 
     for (idx, operand) in operations.iter().enumerate() {
-        let mut sum = 0;
-        let mut number_set: Vec<Vec<usize>> = vec![];
-        for num_list in number_lists.iter() {
-            number_set.push(seperate_digits(num_list[idx]));
-        }
-
         if *operand == "+" {
+            let mut sum = 0;
+            for number in number_lists[idx].iter() {
+                sum += number;
+            }
+            sums_list.push(sum);
         } else if *operand == "*" {
+            let mut prod = 1;
+            for number in number_lists[idx].iter() {
+                prod *= number;
+            }
+            sums_list.push(prod);
         }
     }
 
@@ -119,15 +121,5 @@ mod tests {
 
         assert_eq!(result.0, 4277556);
         assert_eq!(result.1, 3263827);
-    }
-
-    #[test]
-    fn test_num_digits() {
-        let num = 12345 as usize;
-        let expected = vec![1, 2, 3, 4, 5];
-
-        let result = seperate_digits(num);
-
-        assert_eq!(result, expected);
     }
 }
