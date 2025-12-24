@@ -1,8 +1,15 @@
 mod aoc_2025;
 
 fn main() {
-    println!("Hello, world!");
-    day_6();
+    println!("Hello, Advent of Code!");
+    day_7();
+}
+
+#[allow(unused)]
+fn day_7() {
+    let beam_splits = crate::aoc_2025::day_7::laboratories("src/aoc_2025/inputs/day_7.txt");
+    println!("Day 7 part 1: {}", beam_splits.0);
+    println!("Day 7 part 2: {}", beam_splits.1);
 }
 
 #[allow(unused)]
