@@ -2,7 +2,14 @@ mod aoc_2025;
 
 fn main() {
     println!("Hello, Advent of Code!");
-    day_7();
+    day_8();
+}
+
+#[allow(unused)]
+fn day_8() {
+    let result = crate::aoc_2025::day_8::playground("src/aoc_2025/inputs/day_8.txt");
+    println!("Day 8 part 1: {}", result.0);
+    println!("Day 8 part 2: {}", result.1);
 }
 
 #[allow(unused)]
