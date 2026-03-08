@@ -6,6 +6,13 @@ fn main() {
 }
 
 #[allow(unused)]
+fn day_9() {
+    let result = crate::aoc_2025::day_9::movie_theater("src/aco_2025/inputs/day_9.txt");
+    println!("Day 9, part 1: {}", result.0);
+    println!("Day 9, part 2: {}", result.1);
+}
+
+#[allow(unused)]
 fn day_8() {
     let result = crate::aoc_2025::day_8::playground("src/aoc_2025/inputs/day_8.txt", 1000);
     println!("Day 8 part 1: {}", result.0);
