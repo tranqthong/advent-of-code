@@ -2,12 +2,12 @@ mod aoc_2025;
 
 fn main() {
     println!("Hello, Advent of Code!");
-    day_8();
+    day_9();
 }
 
 #[allow(unused)]
 fn day_9() {
-    let result = crate::aoc_2025::day_9::movie_theater("src/aco_2025/inputs/day_9.txt");
+    let result = crate::aoc_2025::day_9::movie_theater("src/aoc_2025/inputs/day_9.txt");
     println!("Day 9, part 1: {}", result.0);
     println!("Day 9, part 2: {}", result.1);
 }
